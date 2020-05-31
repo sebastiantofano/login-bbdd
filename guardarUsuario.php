@@ -16,12 +16,16 @@ $stmt = $conn->prepare("INSERT into usuario (nombreUsuario, claveUsuario) values
 $stmt->bind_param("ss", $usuario,$clave);
 $ok = $stmt->execute();
 
-if(!$ok){
-    echo "Falló la ejecución: (" . $stmt->errno . ") " . $stmt->error;
+if(!$ok){ /* UN FALLO POSIBLE ES QUE EL USUARIO YA EXISTA*/
+    echo "Falló la ejecución: (" . $stmt->errno . ") " . $stmt->error; /* Para ver el fallo, comentar los header*/
+    $stmt->close();
+    $conn->close();
+    header("Location: registro.php?existe=1");
+    exit();
 }
 $stmt->close();
 $conn->close();
-header("Location: registro.php?creado=true");
+header("Location: registro.php?creado=1");
 exit();
 
 
